@@ -9,9 +9,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/example/pulsemetrics/pkg/api"
-	"github.com/example/pulsemetrics/pkg/ingest"
-	"github.com/example/pulsemetrics/pkg/storage"
+	"github.com/vinayak55jain/pulsemetrics/pkg/api"
+	"github.com/vinayak55jain/pulsemetrics/pkg/ingest"
+	"github.com/vinayak55jain/pulsemetrics/pkg/storage"
 )
 
 func main() {
