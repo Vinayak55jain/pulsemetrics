@@ -1,12 +1,8 @@
 package ingest
 
-import "time"
+import model "github.com/vinayak55jain/pulsemetrics/pkg/model"
 
-// MetricEvent represents ONE metric sent by client
-type MetricEvent struct {
-	Type      string            `json:"type"`
-	Name      string            `json:"name"`
-	Value     float64           `json:"value"`
-	Tags      map[string]string `json:"tags"`
-	Timestamp time.Time         `json:"timestamp"`
-}
+// MetricEvent is an alias to the shared model type. Using a shared model
+// package removes import cycles between ingest and storage while keeping the
+// ingest package API stable and simple to use.
+type MetricEvent = model.MetricEvent
