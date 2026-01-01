@@ -16,9 +16,18 @@ func RegisterRoutes(mux *http.ServeMux, ing *ingest.Ingestor) {
 			return
 		}
 
-		event.Timestamp = time.Now()
+		if event.Timestamp.IsZero() {
+			event.Timestamp = time.Now()
+		}
 		ing.Push(event) // NON-BLOCKING
 
 		w.WriteHeader(http.StatusAccepted)
+	})
+
+	// Simple JSON metrics endpoint exposing the ingestion counters.
+	mux.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		ms := ingest.SnapshotMetrics()
+		_ = json.NewEncoder(w).Encode(ms)
 	})
 }

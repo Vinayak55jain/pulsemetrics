@@ -1,6 +1,9 @@
 package ingest
 
-import "log"
+import (
+	"log"
+	"sync/atomic"
+)
 
 // Buffer holds incoming metric events
 type Buffer struct {
@@ -13,13 +16,19 @@ func NewBuffer(size int) *Buffer {
 	}
 }
 
-// Push is NON-BLOCKING
 func (b *Buffer) Push(event MetricEvent) {
 	select {
 	case b.ch <- event:
-		// accepted
+		atomic.AddUint64(&ingestionCount, 1)
 	default:
-		// buffer full → drop
+		
+		atomic.AddUint64(&metricsDropped, 1)
 		log.Println("buffer full, dropping metric")
 	}
 }
+
+// Input exposes the underlying channel for consumers.
+func (b *Buffer) Input() <-chan MetricEvent { return b.ch }
+
+// Close closes the buffer channel to signal consumers.
+func (b *Buffer) Close() { close(b.ch) }

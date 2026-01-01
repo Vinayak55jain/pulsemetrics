@@ -9,7 +9,6 @@ type Config struct {
 	WorkerCount   int
 }
 
-// DefaultConfig gives sane production defaults
 func DefaultConfig() Config {
 	return Config{
 		BatchSize:     10,

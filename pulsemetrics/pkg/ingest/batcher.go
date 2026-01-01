@@ -1,6 +1,9 @@
 package ingest
 
-import "time"
+import (
+	"sync/atomic"
+	"time"
+)
 
 type Batcher struct {
 	buffer *Buffer
@@ -31,18 +34,22 @@ func (b *Batcher) Start() {
 				batch = append(batch, event)
 				if len(batch) >= b.cfg.BatchSize {
 					b.out <- batch
+					// record a flushed batch
+					atomic.AddUint64(&batchesFlushed, 1)
 					batch = make([]MetricEvent, 0, b.cfg.BatchSize)
 				}
 
 			case <-ticker.C:
 				if len(batch) > 0 {
 					b.out <- batch
+					atomic.AddUint64(&batchesFlushed, 1)
 					batch = make([]MetricEvent, 0, b.cfg.BatchSize)
 				}
 
 			case <-b.stop:
 				if len(batch) > 0 {
 					b.out <- batch
+					atomic.AddUint64(&batchesFlushed, 1)
 				}
 				close(b.out)
 				return
