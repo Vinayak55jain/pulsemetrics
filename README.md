@@ -238,7 +238,7 @@ All designs are **production-inspired**.
 ## 🔗 Repository
 
 **GitHub:**
-[https://github.com/Vinayak55jain/pulsemetrics.git](https://github.com/Vinayak55jain/pulsemetrics.git)
+https://github.com/Vinayak55jain/pulsemetrics.git
 
 ## 🧑‍💻 Purpose
 
